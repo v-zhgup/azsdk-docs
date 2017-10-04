@@ -1,4 +1,4 @@
-# AzSDK Subscription Security Package(SS)
+# AzSDK Subscription Security Package
 
 ![Subscription_Security](../Images/Subscription_Security.JPG)
 
@@ -322,7 +322,7 @@ The basic script flow configures these alerts after taking an email id as input.
 ### Configure alerts for your subscription
 You can setup alerts for a subscription using the following command:
 ```PowerShell
-Set-AzSDKAlerts -SubscriptionId <subscriptionid> -SecurityContactEmails <SecurityContactEmails>
+Set-AzSDKAlerts -SubscriptionId <subscriptionid> -SecurityContactEmails <SecurityContactEmails> [-SecurityPhoneNumbers <SecurityPhoneNumbers>]
 ```
 	
 As noted above, by default alerts are configured for activities that are deemed to be Critical or High in severity by AzSDK.
@@ -330,7 +330,8 @@ As noted above, by default alerts are configured for activities that are deemed 
 |Config Param Name	|Purpose	|Comments|
 | ----------------  | --------- | ------ |
 |SubscriptionId 	|Subscription ID against which the alerts would be setup| |
-|SecurityContactEmails	|Email address of Security Point of Contact, can be a mail enabled security group or a distribution list |pattif@contoso.com, davidchew@contoso.net|
+|SecurityContactEmails	|Email address of Security Point of Contact, can be a mail enabled security group or a distribution list |abc@contoso.com, xyz@contoso.net|
+|SecurityPhoneNumbers	|Phone numbers of Security Point of Contact. Note that only the country code '1' is currently supported for SMS. |425-1234567,425-1234568|
 
 [Back to top…](Readme.md#contents)
 ### Remove previously configured alerts from your subscription
@@ -345,13 +346,8 @@ Remove-AzSDKAlerts -SubscriptionId <SubscriptionID> -Tags <TagNames>
 |SubscriptionID	|Subscription ID against which these alerts would be setup|
 |Tags |Comma-separated alert tag names which needs to be removed|
 
-**Note**: This command cleans up all alerts in the resource group 'AzSDKAlertsRG'. This resource group is used internally by AzSDK as a container for the alert objects it registers. As a result, it is advisable to not add other alerts (or other types of resources) to this RG.
-   
-- Steps to clean all the alerts:  
-    You could simply delete the resource group under which all the Azsdk alerts are configured by running below command.
-```PowerShell
-Remove-AzSDKAlerts -SubscriptionId <SubscriptionId> -DeleteResourceGroup 
-```
+**Note**: This command cleans up all alerts in the resource group 'AzSDKRG'. This resource group is used internally as a container for AzSDK objects. As a result, it is advisable to not add other alerts (or other types of resources) to this RG.
+
 [Back to top…](Readme.md#contents)
 ### Configure alerts scoped to specific resource groups
 You may be interested in enabling alerts but only for resources within a particular (target) resource group. This may be done using the -TargetResourceGroup parameter. 
@@ -430,7 +426,7 @@ This command will *overwrite* the contact emails and contact phone previously se
 ## AzSDK: Suscription Security - ARM Policy
 
 ### Overview
-The native ARM Policy feature in Azure can be used control access to resources by explicitly auditing or denying access to certain operations on them. The ARM Policy setup script in the AzSDK uses this feature to define and deploy some broadly applicable security policies in the subscription. By using the setup script (either standalone or through the overall SS-Provisioning script), you can be assured that the subscription is compliant with respect to the core set of policies expected to be in place by AzSDK.
+The native ARM Policy feature in Azure can be used control access to resources by explicitly auditing or denying access to certain operations on them. The ARM Policy setup script in the AzSDK uses this feature to define and deploy some broadly applicable security policies in the subscription. By using the setup script (either standalone or through the overall Provisioning script), you can be assured that the subscription is compliant with respect to the core set of policies expected to be in place by AzSDK.
 
 [Back to top…](Readme.md#contents)
 ### Setup ARM policies on your subscription
