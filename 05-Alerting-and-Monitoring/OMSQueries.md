@@ -23,7 +23,8 @@ AzSDK_CL
 
 --------------------------
 ### Services scan result for baseline controls: 
-Following query will help you to check effective scan result for baseline controls
+Following query will help you to check effective services scan result for baseline controls
+> **Note**: This will not give result for subscription scan.
 
 ``` AIQL
 let passStatuslist = AzSDK_MetaData_CL
@@ -36,7 +37,7 @@ let baseControlList = AzSDK_Inventory_CL
     AzSDK_Inventory_CL
     | where  IsBaselineControl_b == true
 )
-on RunIdentifier_s;
+on RunIdentifier_s | distinct  SubscriptionId,ResourceId,ControlId_s,FeatureName_s,ResourceGroupName_s,ResourceName_s;
 let elevatedAccessControlStatus = AzSDK_CL
 | where TimeGenerated > ago(90d) and HasAttestationReadPermissions_b == true and HasRequiredAccess_b == true and IsLatestPSModule_b == true and IsBaselineControl_b == true  and Tags_s contains "OwnerAccess"
 | summarize arg_max(TimeGenerated,ControlStatus_s) by SubscriptionId,ResourceId,ChildResourceName_s,ControlId_s;
